@@ -131,6 +131,14 @@ export class D1Client extends BaseD1Client {
         return this.query(PostSchema, 'SELECT * FROM posts WHERE tenant_id = ?', [this.tenantId]);
     }
 
+    async getPostBySlug(slug: string): Promise<Post | null> {
+        if (this.tenantId === null) {
+            throw new Error('Cannot get post by slug without a specific tenantId.');
+        }
+        const sql = `SELECT * FROM posts WHERE slug = ? AND tenant_id = ?`;
+        return this.queryOne(PostSchema, sql, [slug, this.tenantId]);
+    }
+
     async createPost(data: Omit<Post, 'id' | 'tenant_id' | 'updated_at' | 'created_at' | 'version'>): Promise<D1Result> {
         if (this.tenantId === null) {
             throw new Error('Cannot create post without a specific tenantId.');

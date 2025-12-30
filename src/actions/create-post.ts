@@ -2,7 +2,7 @@
 'use server';
 
 import { D1Client, getD1Binding } from '@/lib/d1';
-import { Post } from '@/types/db';
+import { Post, PostSchema } from '@/types/db';
 import { auth } from '@/lib/auth'; // Assuming auth utility
 
 interface CreatePostResult {
@@ -42,10 +42,9 @@ export async function createPost(formData: FormData): Promise<CreatePostResult> 
         });
 
         if (result.success) {
-            // Need to fetch the created post to get its ID, as createPost doesn't return it directly
-            const createdPost = await d1Client.queryOne(PostSchema, 'SELECT id FROM posts WHERE slug = ? AND tenant_id = ? ORDER BY created_at DESC', [slug, tenantId]);
-            return { success: true, message: 'Post created successfully!', postId: createdPost?.id };
-        } else {
+                    // Need to fetch the created post to get its ID, as createPost doesn't return it directly
+                    const createdPost = await d1Client.getPostBySlug(slug);
+                    return { success: true, message: 'Post created successfully!', postId: createdPost?.id };        } else {
             return { success: false, message: result.error || 'Failed to create post.' };
         }
     } catch (error: any) {
