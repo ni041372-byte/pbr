@@ -51,3 +51,4 @@ node_modules
 
 # My custom ignored files
 배포로그.log
+.gemini/
