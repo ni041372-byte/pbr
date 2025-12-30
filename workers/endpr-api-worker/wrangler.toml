@@ -1,0 +1,17 @@
+name = "endpr-api-worker"
+main = "src/index.ts"
+compatibility_date = "2024-04-05"
+
+[vars]
+R2_ACCESS_KEY_ID = "YOUR_R2_ACCESS_KEY_ID"
+R2_SECRET_ACCESS_KEY = "YOUR_R2_SECRET_ACCESS_KEY"
+CLOUDFLARE_ACCOUNT_ID = "YOUR_CLOUDFLARE_ACCOUNT_ID"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "endpr-db"
+database_id = "f786c61f-1b1a-4c5b-8b8e-73cbd8965af7"
+
+[[r2_buckets]]
+binding = "R2_ASSETS"
+bucket_name = "endpr-assets"
