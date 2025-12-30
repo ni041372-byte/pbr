@@ -1,4 +1,5 @@
-name = "endpr-api-worker"
+# workers/endpr-api-worker/wrangler.toml
+name = 'pbr'
 main = "src/index.ts"
 compatibility_date = "2024-04-05"
 
