@@ -1,8 +1,53 @@
-node_modules/
-.wrangler/
-.next/
-dist/
-build/
-.env
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+*.pnpm-debug.log
 
-.gemini/
+# Diagnostic reports (https://nodejs.org/api/report.html)
+.report/
+
+# cspell:disable
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# IDEs and OS folders
+.DS_Store
+.history
+
+# next.js
+.next/
+out/
+
+# vercel
+.vercel/
+
+# typescript
+*.tsbuildinfo
+
+# d1
+.wrangler/
+
+# misc
+node_modules
+.env.local
+.env.*.local
+.DS_Store
+*.seed
+*.sqlite
+
+# Cloudflare Pages specific
+.mf/
+
+# My custom ignored files
+배포로그.log
