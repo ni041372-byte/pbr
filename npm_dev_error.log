@@ -1,0 +1,120 @@
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+⚠ ./src/lib/d1.ts:13:34
+Ecmascript file had an error
+[0m [90m 11 |[39m         [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+ [90m 12 |[39m         [36mconst[39m [33mDatabase[39m [33m=[39m require([32m'better-sqlite3'[39m)[33m;[39m
+[31m[1m>[22m[39m[90m 13 |[39m         [36mconst[39m dbPath [33m=[39m path[33m.[39mjoin(process[33m.[39mcwd()[33m,[39m [32m'.wrangler'[39m[33m,[39m [32m'state'[39m[33m,[39m [32m'v3'[39m[33m,[39m [32m'd1'[39m[33m,[39m [32m'DO_NOT_USE_IN_LOCAL_MODE.sqlite'[39m)[33m;[39m
+ [90m    |[39m                                  [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 14 |[39m         db [33m=[39m [36mnew[39m [33mDatabase[39m(dbPath[33m,[39m { verbose[33m:[39m console[33m.[39mlog })[33m;[39m
+ [90m 15 |[39m         [33mD1_LIB[39m [33m=[39m [32m'better-sqlite3'[39m[33m;[39m
+ [90m 16 |[39m         console[33m.[39mlog([32m'[D1 Client] Using better-sqlite3 for local development.'[39m)[33m;[39m[0m
+
+A Node.js API is used (process.cwd at line: 13) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace:
+  Edge Middleware:
+    ./src/lib/d1.ts
+    ./src/middleware.ts
+
+
+[D1 Client] Could not load better-sqlite3. Ensure it's installed for local development. Error: The edge runtime does not support Node.js 'fs' module.
+Learn More: https://nextjs.org/docs/messages/node-module-in-edge-runtime
+    at ignore-listed frames {
+  
+}
+⚠ ./src/lib/d1.ts:13:34
+Ecmascript file had an error
+[0m [90m 11 |[39m         [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+ [90m 12 |[39m         [36mconst[39m [33mDatabase[39m [33m=[39m require([32m'better-sqlite3'[39m)[33m;[39m
+[31m[1m>[22m[39m[90m 13 |[39m         [36mconst[39m dbPath [33m=[39m path[33m.[39mjoin(process[33m.[39mcwd()[33m,[39m [32m'.wrangler'[39m[33m,[39m [32m'state'[39m[33m,[39m [32m'v3'[39m[33m,[39m [32m'd1'[39m[33m,[39m [32m'DO_NOT_USE_IN_LOCAL_MODE.sqlite'[39m)[33m;[39m
+ [90m    |[39m                                  [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 14 |[39m         db [33m=[39m [36mnew[39m [33mDatabase[39m(dbPath[33m,[39m { verbose[33m:[39m console[33m.[39mlog })[33m;[39m
+ [90m 15 |[39m         [33mD1_LIB[39m [33m=[39m [32m'better-sqlite3'[39m[33m;[39m
+ [90m 16 |[39m         console[33m.[39mlog([32m'[D1 Client] Using better-sqlite3 for local development.'[39m)[33m;[39m[0m
+
+A Node.js API is used (process.cwd at line: 13) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace:
+  Edge Middleware:
+    ./src/lib/d1.ts
+    ./src/middleware.ts
+
+
+⚠ ./src/lib/d1.ts:13:34
+Ecmascript file had an error
+[0m [90m 11 |[39m         [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+ [90m 12 |[39m         [36mconst[39m [33mDatabase[39m [33m=[39m require([32m'better-sqlite3'[39m)[33m;[39m
+[31m[1m>[22m[39m[90m 13 |[39m         [36mconst[39m dbPath [33m=[39m path[33m.[39mjoin(process[33m.[39mcwd()[33m,[39m [32m'.wrangler'[39m[33m,[39m [32m'state'[39m[33m,[39m [32m'v3'[39m[33m,[39m [32m'd1'[39m[33m,[39m [32m'DO_NOT_USE_IN_LOCAL_MODE.sqlite'[39m)[33m;[39m
+ [90m    |[39m                                  [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 14 |[39m         db [33m=[39m [36mnew[39m [33mDatabase[39m(dbPath[33m,[39m { verbose[33m:[39m console[33m.[39mlog })[33m;[39m
+ [90m 15 |[39m         [33mD1_LIB[39m [33m=[39m [32m'better-sqlite3'[39m[33m;[39m
+ [90m 16 |[39m         console[33m.[39mlog([32m'[D1 Client] Using better-sqlite3 for local development.'[39m)[33m;[39m[0m
+
+A Node.js API is used (process.cwd at line: 13) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace:
+  Edge Middleware:
+    ./src/lib/d1.ts
+    ./src/middleware.ts
+
+
+⚠ ./src/lib/d1.ts:13:34
+Ecmascript file had an error
+[0m [90m 11 |[39m         [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+ [90m 12 |[39m         [36mconst[39m [33mDatabase[39m [33m=[39m require([32m'better-sqlite3'[39m)[33m;[39m
+[31m[1m>[22m[39m[90m 13 |[39m         [36mconst[39m dbPath [33m=[39m path[33m.[39mjoin(process[33m.[39mcwd()[33m,[39m [32m'.wrangler'[39m[33m,[39m [32m'state'[39m[33m,[39m [32m'v3'[39m[33m,[39m [32m'd1'[39m[33m,[39m [32m'DO_NOT_USE_IN_LOCAL_MODE.sqlite'[39m)[33m;[39m
+ [90m    |[39m                                  [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 14 |[39m         db [33m=[39m [36mnew[39m [33mDatabase[39m(dbPath[33m,[39m { verbose[33m:[39m console[33m.[39mlog })[33m;[39m
+ [90m 15 |[39m         [33mD1_LIB[39m [33m=[39m [32m'better-sqlite3'[39m[33m;[39m
+ [90m 16 |[39m         console[33m.[39mlog([32m'[D1 Client] Using better-sqlite3 for local development.'[39m)[33m;[39m[0m
+
+A Node.js API is used (process.cwd at line: 13) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace:
+  Edge Middleware:
+    ./src/lib/d1.ts
+    ./src/middleware.ts
+
+
+⚠ ./src/lib/d1.ts:13:34
+Ecmascript file had an error
+[0m [90m 11 |[39m         [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+ [90m 12 |[39m         [36mconst[39m [33mDatabase[39m [33m=[39m require([32m'better-sqlite3'[39m)[33m;[39m
+[31m[1m>[22m[39m[90m 13 |[39m         [36mconst[39m dbPath [33m=[39m path[33m.[39mjoin(process[33m.[39mcwd()[33m,[39m [32m'.wrangler'[39m[33m,[39m [32m'state'[39m[33m,[39m [32m'v3'[39m[33m,[39m [32m'd1'[39m[33m,[39m [32m'DO_NOT_USE_IN_LOCAL_MODE.sqlite'[39m)[33m;[39m
+ [90m    |[39m                                  [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 14 |[39m         db [33m=[39m [36mnew[39m [33mDatabase[39m(dbPath[33m,[39m { verbose[33m:[39m console[33m.[39mlog })[33m;[39m
+ [90m 15 |[39m         [33mD1_LIB[39m [33m=[39m [32m'better-sqlite3'[39m[33m;[39m
+ [90m 16 |[39m         console[33m.[39mlog([32m'[D1 Client] Using better-sqlite3 for local development.'[39m)[33m;[39m[0m
+
+A Node.js API is used (process.cwd at line: 13) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace:
+  Edge Middleware:
+    ./src/lib/d1.ts
+    ./src/middleware.ts
+
+
+⚠ ./src/lib/d1.ts:13:34
+Ecmascript file had an error
+[0m [90m 11 |[39m         [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+ [90m 12 |[39m         [36mconst[39m [33mDatabase[39m [33m=[39m require([32m'better-sqlite3'[39m)[33m;[39m
+[31m[1m>[22m[39m[90m 13 |[39m         [36mconst[39m dbPath [33m=[39m path[33m.[39mjoin(process[33m.[39mcwd()[33m,[39m [32m'.wrangler'[39m[33m,[39m [32m'state'[39m[33m,[39m [32m'v3'[39m[33m,[39m [32m'd1'[39m[33m,[39m [32m'DO_NOT_USE_IN_LOCAL_MODE.sqlite'[39m)[33m;[39m
+ [90m    |[39m                                  [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 14 |[39m         db [33m=[39m [36mnew[39m [33mDatabase[39m(dbPath[33m,[39m { verbose[33m:[39m console[33m.[39mlog })[33m;[39m
+ [90m 15 |[39m         [33mD1_LIB[39m [33m=[39m [32m'better-sqlite3'[39m[33m;[39m
+ [90m 16 |[39m         console[33m.[39mlog([32m'[D1 Client] Using better-sqlite3 for local development.'[39m)[33m;[39m[0m
+
+A Node.js API is used (process.cwd at line: 13) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace:
+  Edge Middleware:
+    ./src/lib/d1.ts
+    ./src/middleware.ts
+
+

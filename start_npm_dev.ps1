@@ -1,0 +1,1 @@
+Start-Process -NoNewWindow -FilePath "cmd.exe" -ArgumentList "/c npm run dev > npm_dev_output.log 2> npm_dev_error.log"

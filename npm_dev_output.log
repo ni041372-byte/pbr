@@ -1,0 +1,285 @@
+
+> dev
+> next dev
+
+▲ Next.js 16.1.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://210.120.87.65:3000
+
+✓ Starting...
+✓ Ready in 617ms
+D1 Client loaded with conditional support for better-sqlite3/Cloudflare D1/Mock.
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/?x-tenant-id=tnt_dev_001
+ GET / 404 in 435ms (compile: 184ms, proxy.ts: 117ms, render: 134ms)
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/.well-known/appspecific/com.chrome.devtools.json?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/.well-known/appspecific/com.chrome.devtools.json?x-tenant-id=tnt_dev_001
+ GET / 404 in 124ms (compile: 10ms, proxy.ts: 6ms, render: 108ms)
+[API /presigned] Received x-tenant-id: null
+ POST /api/upload/presigned 401 in 71ms (compile: 58ms, render: 13ms)
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/?x-tenant-id=tnt_dev_001
+ GET / 500 in 269ms (compile: 123ms, proxy.ts: 13ms, render: 133ms)
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/?x-tenant-id=tnt_dev_001
+ GET / 500 in 31ms (compile: 10ms, proxy.ts: 9ms, render: 12ms)
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/?x-tenant-id=tnt_dev_001
+ GET / 500 in 27ms (compile: 14ms, proxy.ts: 4ms, render: 9ms)
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/?x-tenant-id=tnt_dev_001
+ GET / 500 in 26ms (compile: 8ms, proxy.ts: 4ms, render: 14ms)
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/?x-tenant-id=tnt_dev_001
+ GET / 500 in 22ms (compile: 7ms, proxy.ts: 7ms, render: 8ms)
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_shared_lib_8bac8163._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_5a8a528e._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/.well-known/appspecific/com.chrome.devtools.json?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_b3fb3b5f._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_app_72f3d36f.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Bnext%5D_entry_page-loader_ts_742e4b53._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_react-dom_4411d9bd._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_7f09fef0._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__45f039c3._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/pages__app_2da965e7._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/turbopack-pages__app_0fce199e._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_shared_lib_9a2a7093._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_a183fb77._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_error_1cfbb379.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_shared_lib_8bac8163._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_5a8a528e._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_b3fb3b5f._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_app_72f3d36f.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Bnext%5D_entry_page-loader_ts_742e4b53._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/development/_devMiddlewareManifest.json?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Bnext%5D_entry_page-loader_ts_43b523b5._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__092393de._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/pages__error_2da965e7._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_react-dom_4411d9bd._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_7f09fef0._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/turbopack-pages__error_af01c4e3._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/development/_ssgManifest.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/development/_buildManifest.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__45f039c3._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/pages__app_0fce199e._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_shared_lib_9a2a7093._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_a183fb77._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_error_1cfbb379.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Bnext%5D_entry_page-loader_ts_43b523b5._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__092393de._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/pages__error_af01c4e3._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/?x-tenant-id=tnt_dev_001
+ GET / 500 in 21ms (compile: 9ms, proxy.ts: 3ms, render: 8ms)
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_shared_lib_8bac8163._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/.well-known/appspecific/com.chrome.devtools.json?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_5a8a528e._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_b3fb3b5f._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_app_72f3d36f.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Bnext%5D_entry_page-loader_ts_742e4b53._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_react-dom_4411d9bd._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_7f09fef0._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__45f039c3._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/pages__app_2da965e7._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/turbopack-pages__app_0fce199e._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_shared_lib_9a2a7093._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_a183fb77._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_error_1cfbb379.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Bnext%5D_entry_page-loader_ts_43b523b5._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__092393de._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/pages__error_2da965e7._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/turbopack-pages__error_af01c4e3._.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/development/_ssgManifest.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/development/_buildManifest.js?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_shared_lib_8bac8163._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_5a8a528e._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_b3fb3b5f._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_app_72f3d36f.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Bnext%5D_entry_page-loader_ts_742e4b53._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_react-dom_4411d9bd._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_7f09fef0._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__45f039c3._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/pages__app_0fce199e._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_shared_lib_9a2a7093._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/development/_devMiddlewareManifest.json?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_dist_a183fb77._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/node_modules_next_error_1cfbb379.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/favicon.ico?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Bnext%5D_entry_page-loader_ts_43b523b5._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__092393de._.js.map?x-tenant-id=tnt_dev_001
+[Middleware] Host: localhost:3000
+[Middleware] Matched: Localhost. Tenant ID: tnt_dev_001
+[Middleware] Rewriting URL with x-tenant-id: http://localhost:3000/_next/static/chunks/pages__error_af01c4e3._.js.map?x-tenant-id=tnt_dev_001
