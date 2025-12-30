@@ -4,7 +4,7 @@
 import { D1Database } from '@cloudflare/workers-types';
 import { D1Client, getD1Binding } from '../lib/d1';
 import { Post, Deployment } from '../types/db';
-import { github } from '@actions/github'; // This line needs to be added or modified. The tool provides the github object directly.
+
 
 interface PublishPostResult {
     success: boolean;
@@ -58,7 +58,7 @@ export async function publishPost(postId: string, tenantId: string): Promise<Pub
         // Check if file exists to get its SHA for update
         let fileSha: string | undefined;
         try {
-            const fileContents = await github.get_file_contents({
+            const { data: fileContents } = await get_file_contents({
                 owner,
                 repo,
                 path: filePath,
@@ -73,7 +73,7 @@ export async function publishPost(postId: string, tenantId: string): Promise<Pub
             }
         }
 
-        await github.create_or_update_file({
+        await create_or_update_file({
             owner,
             repo,
             path: filePath,
