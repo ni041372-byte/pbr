@@ -101,6 +101,31 @@ export class D1Client extends BaseD1Client {
         return this.run(`INSERT INTO users (id, tenant_id, email, role, created_at) VALUES (?, ?, ?, ?, ?)`, [parsedData.id, parsedData.tenant_id, parsedData.email, parsedData.role, parsedData.created_at]);
     }
 
+    async updateUser(id: string, data: Partial<Omit<User, 'id'>>): Promise<D1Result> {
+        const fields = Object.keys(data).map(key => `${key} = ?`);
+        if (fields.length === 0) throw new Error('No fields provided for update.');
+
+        const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
+        const params = [...Object.values(data), id];
+
+        const result = await this.run(sql, params);
+        if (result.changes === 0) {
+            throw new Error('User not found or no changes made.');
+        }
+        return result;
+    }
+
+    async deleteUser(id: string): Promise<D1Result> {
+        const sql = `DELETE FROM users WHERE id = ?`;
+        const result = await this.run(sql, [id]);
+        if (result.changes === 0) {
+            throw new Error('User not found.');
+        }
+        return result;
+    }
+
+
+
     async createPost(data: Omit<Post, 'id' | 'tenant_id' | 'updated_at' | 'created_at' | 'version'>): Promise<D1Result> {
         if (!this.tenantId) throw new Error('Cannot create post without a specific tenantId.');
         const id = `pst_${randomUUID()}`;
