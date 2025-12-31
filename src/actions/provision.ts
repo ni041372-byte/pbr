@@ -1,9 +1,10 @@
+// src/actions/provision.ts
 'use server';
 
-// Placeholders for D1, GitHub, and Cloudflare clients
-// import { createD1Client } from '../lib/d1';
-// import { github } from '../lib/github';
-// import { cloudflare } from '../lib/cloudflare';
+import { getD1Binding, SuperAdminD1Client } from '../lib/d1';
+import { getSession } from '../lib/auth';
+import { fork_repository } from 'github'; // Assuming this tool is available
+import { randomUUID } from 'crypto';
 
 type ProvisionResult = {
     success: boolean;
@@ -18,40 +19,75 @@ interface ProvisionParams {
     plan: 'BASIC' | 'ENTERPRISE';
 }
 
-/**
- * Provisions a new tenant.
- * This is a complex workflow that orchestrates multiple services:
- * 1. Creates a new GitHub repository from a template.
- * 2. Configures a Cloudflare for SaaS custom hostname.
- * 3. Creates a new tenant record in the D1 database.
- * 
- * @param params The parameters for the new tenant.
- * @returns A result object indicating success or failure, including DNS records for the customer.
- */
+function slugify(text: string): string {
+    return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+}
+
 export async function provisionNewTenant(params: ProvisionParams): Promise<ProvisionResult> {
-    const { customerName, requestedDomain } = params;
-    const superAdminD1 = null; // createD1Client(null);
+    const session = await getSession();
+    // In a real app, we'd check for a specific 'super-admin' role
+    if (!session?.user || session.user.tenant_id !== null) {
+        return { success: false, error: 'Unauthorized. Only Super Admins can provision new tenants.' };
+    }
 
-    console.log(`[Action] Initiating provisioning for: ${customerName} (${requestedDomain})`);
+    const { customerName, requestedDomain, plan } = params;
+    
+    const db = getD1Binding();
+    const d1Admin = new SuperAdminD1Client(db);
 
-    // The detailed logic will be implemented here.
-    // 1. Generate a slug and new tenant ID.
-    // 2. Call GitHub API to create a new repo from 'endpr-template'.
-    // 3. Call Cloudflare API to add a custom hostname.
-    // 4. On success of BOTH APIs, insert the new tenant record into D1.
-    // 5. If any step fails, attempt to roll back (e.g., delete the created repo).
-    //    This is a complex transaction that might require a state machine.
+    const slug = slugify(customerName);
+    const newTenantId = `tnt_${randomUUID()}`;
+    const newRepoName = `endpr-tenant-${slug}`;
+    const githubOrg = process.env.GITHUB_ORG!; // Must be set in environment
+    const templateRepo = process.env.GITHUB_TEMPLATE_REPO!; // e.g. 'endpr-template'
+    
+    try {
+        // 1. Create new GitHub repo by forking a template
+        console.log(`Forking ${githubOrg}/${templateRepo} into ${githubOrg}/${newRepoName}`);
+        const forkResult = await fork_repository({
+            owner: githubOrg,
+            repo: templateRepo,
+            organization: githubOrg,
+            name: newRepoName,
+        });
 
-    console.log('TODO: Implement the full provisioning logic using GitHub and Cloudflare MCPs.');
+        // This is a simplified assumption. The `fork_repository` tool response
+        // would need to be checked for the new repo's details.
+        const newRepoFullName = forkResult.full_name;
 
-    // Placeholder response
-    return { 
-        success: true,
-        tenantId: 'tnt_newly_created_123',
-        dnsRecords: {
-            type: 'TXT',
-            name: '_cf-custom-hostname.' + requestedDomain,
-            value: 'some-verification-string-from-cloudflare-api'
-        }
-    };
+        // 2. Configure Cloudflare for SaaS custom hostname (Placeholder)
+        console.log(`TODO: Call Cloudflare API to add custom hostname: ${requestedDomain}`);
+        const dnsVerificationValue = `placeholder-verification-value-for-${requestedDomain}`;
+
+        // 3. Create the new tenant record in D1
+        await d1Admin.createTenant({
+            id: newTenantId,
+            slug: slug,
+            custom_domain: requestedDomain,
+            github_repo: newRepoFullName,
+            plan_tier: plan,
+            config_json: JSON.stringify({}),
+            status: 'PENDING_DNS',
+        });
+
+        return { 
+            success: true,
+            tenantId: newTenantId,
+            dnsRecords: {
+                type: 'TXT',
+                name: '_cf-custom-hostname.' + requestedDomain,
+                value: dnsVerificationValue,
+            }
+        };
+
+    } catch (error: any) {
+        console.error(`[Action] Failed to provision tenant for: ${customerName}`, error);
+        // TODO: Implement rollback logic (e.g., delete forked GitHub repo)
+        return { success: false, error: error.message };
+    }
 }

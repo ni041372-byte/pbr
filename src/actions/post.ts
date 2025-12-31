@@ -1,6 +1,7 @@
 // src/actions/post.ts
 'use server';
 
+import { revalidateTag } from 'next/cache';
 import { D1Database } from '@cloudflare/workers-types';
 import { D1Client, getD1Binding } from '../lib/d1';
 import { Post, Deployment } from '../types/db';
@@ -19,6 +20,7 @@ export async function publishPost(postId: string, tenantId: string): Promise<Pub
     let post: Post | null = null;
     let originalStatus: Post['status'] = 'DRAFT';
     let deploymentStatus: Deployment['status'] = 'FAILURE'; // Default to failure
+    let commitSha: string | null = null;
 
     try {
         // 1. Fetch the post
@@ -26,6 +28,12 @@ export async function publishPost(postId: string, tenantId: string): Promise<Pub
         if (!post) {
             return { success: false, message: 'Post not found.' };
         }
+
+        // Validate required fields before publishing
+        if (!post.title || !post.slug) {
+            return { success: false, message: 'Post must have a title and a slug to be published.' };
+        }
+
 
         originalStatus = post.status; // Store original status for rollback
 
@@ -73,7 +81,7 @@ export async function publishPost(postId: string, tenantId: string): Promise<Pub
             }
         }
 
-        await create_or_update_file({
+        const fileUpdateResult = await create_or_update_file({
             owner,
             repo,
             path: filePath,
@@ -83,9 +91,18 @@ export async function publishPost(postId: string, tenantId: string): Promise<Pub
             sha: fileSha,
         });
 
+        if (fileUpdateResult?.commit?.sha) {
+            commitSha = fileUpdateResult.commit.sha;
+        }
+
         // If GitHub API call is successful
         deploymentStatus = 'SUCCESS';
         await d1Client.updatePost(postId, { status: 'PUBLISHED', last_published_at: Math.floor(Date.now() / 1000) }, post.version);
+
+        // Revalidate caches
+        revalidateTag(`posts-for-tenant:${tenantId}`);
+        revalidateTag(`post:${postId}`);
+        revalidateTag(`post-by-slug:${tenantId}:${post.slug}`);
 
         return { success: true, message: `Post "${post.title}" published successfully.`, postId };
 
@@ -106,12 +123,11 @@ export async function publishPost(postId: string, tenantId: string): Promise<Pub
         return { success: false, message: `Failed to publish post: ${error.message}` };
     } finally {
         // 4. Log deployment regardless of success or failure
-        const githubCommitSha = deploymentStatus === 'SUCCESS' ? 'mock-github-sha' : null; // Mock SHA
         try {
             await d1Client.createDeployment({
                 tenant_id: tenantId,
                 trigger_source: 'MANUAL',
-                github_commit_sha: githubCommitSha,
+                github_commit_sha: commitSha,
                 cf_deployment_id: null, // Not applicable for mock GitHub
                 status: deploymentStatus,
             });

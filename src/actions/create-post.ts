@@ -2,53 +2,69 @@
 'use server';
 
 import { D1Client, getD1Binding } from '@/lib/d1';
-import { Post, PostSchema } from '@/types/db';
-import { auth } from '@/lib/auth'; // Assuming auth utility
+import { Post } from '@/types/db';
+import { getSession } from '@/lib/auth';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { redirect } from 'next/navigation';
 
-interface CreatePostResult {
+interface ActionResult {
     success: boolean;
     message: string;
-    postId?: string;
+    post?: Post;
 }
 
-export async function createPost(formData: FormData): Promise<CreatePostResult> {
-    const session = await auth();
-    if (!session?.user?.tenantId) {
-        return { success: false, message: 'Unauthorized: Missing tenant ID.' };
-    }
-    const tenantId = session.user.tenantId;
+export async function createPost(formData: FormData): Promise<ActionResult> {
+    const session = await getSession();
+    const tenantId = formData.get('tenantId') as string;
 
-    const db = getD1Binding();
-    const d1Client = new D1Client(db, tenantId);
+    if (!session?.user || session.user.tenant_id !== tenantId) {
+        return { success: false, message: 'Unauthorized' };
+    }
 
     const title = formData.get('title') as string;
     const slug = formData.get('slug') as string;
     const content_md = formData.get('content_md') as string;
-    const frontmatter = formData.get('frontmatter') as string;
 
     if (!title || !slug) {
-        return { success: false, message: 'Title and Slug are required.' };
+        return { success: false, message: 'Title and Slug are required fields.' };
     }
 
     try {
-        // Create a new post
+        const db = getD1Binding();
+        const d1Client = new D1Client(db, tenantId);
+
+        // Check if slug is unique for the tenant
+        const existingPost = await d1Client.getPostBySlug(slug);
+        if (existingPost) {
+            return { success: false, message: 'This slug is already in use. Please choose a unique one.' };
+        }
+
         const result = await d1Client.createPost({
             title,
             slug,
             content_md,
-            frontmatter,
-            status: 'DRAFT', // Newly created posts are in DRAFT status
+            frontmatter: JSON.stringify({ author: session.user.email }), // Add some default frontmatter
+            status: 'DRAFT',
             last_published_at: null,
         });
 
-        if (result.success) {
-                    // Need to fetch the created post to get its ID, as createPost doesn't return it directly
-                    const createdPost = await d1Client.getPostBySlug(slug);
-                    return { success: true, message: 'Post created successfully!', postId: createdPost?.id };        } else {
-            return { success: false, message: result.error || 'Failed to create post.' };
+        if (!result.success) {
+             throw new Error(result.error?.message ?? 'D1 operation failed');
         }
-    } catch (error: any) {
-        console.error('Error creating post:', error);
-        return { success: false, message: `An unexpected error occurred: ${error.message}` };
+
+        const newPost = await d1Client.getPostBySlug(slug);
+        if (!newPost) {
+            throw new Error('Failed to retrieve the newly created post.');
+        }
+        
+        // Revalidate the data cache for the tenant's posts list
+        revalidateTag(`posts-for-tenant:${tenantId}`);
+        // Revalidate the admin page path to reflect changes immediately in the UI
+        revalidatePath('/admin');
+
+        return { success: true, message: 'Post created successfully!', post: newPost };
+
+    } catch (e: any) {
+        return { success: false, message: e.message };
     }
 }

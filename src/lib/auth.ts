@@ -1,23 +1,33 @@
 // src/lib/auth.ts
-// This is a mock authentication utility for development purposes.
-// In a real application, this would integrate with an actual authentication system
-// like NextAuth.js or a custom solution to get the authenticated user's session and tenantId.
+import { getServerSession } from "next-auth/next"
+import { handler } from "@/app/api/auth/[...nextauth]/route"
+import { D1Client } from "./d1";
 
-interface Session {
-    user?: {
-        tenantId?: string;
-        // Add other user properties as needed
-    };
+/**
+ * Retrieves the current session from the server-side.
+ * This is the new source of truth for authentication, replacing the old mock function.
+ */
+export const getSession = async () => {
+    return await getServerSession(handler);
 }
 
-export async function auth(): Promise<Session | null> {
-    // For development, we'll hardcode a tenantId.
-    // In production, this would come from the user's session after authentication.
-    const MOCK_TENANT_ID = 'dev-tenant'; // Use a tenantId that exists in your D1 'tenants' table
+/**
+ * Retrieves the tenantId for the currently authenticated user.
+ * It's a convenience function to be used in Server Actions and Components.
+ */
+export const getTenantId = async (db: D1Client): Promise<string | null> => {
+    const session = await getSession();
 
-    return {
-        user: {
-            tenantId: MOCK_TENANT_ID,
-        },
-    };
+    if (!session?.user?.email) {
+        // Not authenticated
+        return null;
+    }
+    
+    // In a real multi-tenant app, the user's tenantId would be part of the session
+    // or fetched from the DB based on their user ID/email.
+    const user = await db.getUserByEmail(session.user.email);
+    
+    // For now, we assume the user object in the DB has a tenant_id.
+    // If the user is a super-admin, their tenant_id might be null.
+    return user?.tenant_id ?? null;
 }
