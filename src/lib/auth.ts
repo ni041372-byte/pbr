@@ -1,14 +1,9 @@
 // src/lib/auth.ts
 import { getServerSession } from "next-auth/next"
-import { handler } from "@/app/api/auth/[...nextauth]/route"
-import { D1Client } from "./d1";
-
-/**
- * Retrieves the current session from the server-side.
- * This is the new source of truth for authentication, replacing the old mock function.
- */
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+//...
 export const getSession = async () => {
-    return await getServerSession(handler);
+    return await getServerSession(authOptions);
 }
 
 /**
