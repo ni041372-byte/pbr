@@ -58,7 +58,7 @@ export async function createPost(formData: FormData): Promise<ActionResult> {
         }
         
         // Revalidate the data cache for the tenant's posts list
-        revalidateTag(`posts-for-tenant:${tenantId}`);
+        revalidateTag(`posts-for-tenant:${tenantId}`, "max");
         // Revalidate the admin page path to reflect changes immediately in the UI
         revalidatePath('/admin');
 
