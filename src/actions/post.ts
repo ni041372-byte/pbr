@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-import { D1Database } from '@cloudflare/workers-types';
+import type { D1Database } from "@cloudflare/workers-types";
 import { D1Client, getD1Binding } from '../lib/d1';
 import { Post, Deployment } from '../types/db';
 
