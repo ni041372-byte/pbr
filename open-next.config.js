@@ -1,4 +1,3 @@
-/** @type {import('@opennextjs/cloudflare').OpenNextConfig} */
 const config = {
   default: {
     runtime: "edge",
@@ -16,6 +15,7 @@ const config = {
       proxyExternalRequest: "fetch",
     },
   },
+  edgeExternals: ["node:crypto"],
 };
 
 export default config;
