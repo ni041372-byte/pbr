@@ -1,0 +1,12 @@
+name = "pbr"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# OpenNext가 빌드한 결과물이 위치할 경로를 지정합니다.
+[build]
+command = "npm run build"
+
+[site]
+bucket = ".open-next/assets"
+
+
