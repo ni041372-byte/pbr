@@ -49,7 +49,7 @@ export async function createPost(formData: FormData): Promise<ActionResult> {
         });
 
         if (!result.success) {
-             throw new Error(result.error?.message ?? 'D1 operation failed');
+             throw new Error(result.error ?? 'D1 operation failed');
         }
 
         const newPost = await d1Client.getPostBySlug(slug);
