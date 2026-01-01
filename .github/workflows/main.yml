@@ -2,7 +2,7 @@ name: Deploy to Cloudflare Pages
 
 on:
   push:
-    branches: [""] # 작업 중인 브랜치 이름 확인!
+    branches: ["**"] # 작업 중인 브랜치 이름 확인!
   workflow_dispatch:
 
 permissions:
