@@ -3,7 +3,6 @@ import { D1Database, D1Result } from '@cloudflare/workers-types';
 import { z } from 'zod';
 import { Tenant, TenantSchema, User, UserSchema, Post, PostSchema, Deployment, DeploymentSchema } from '../types/db';
 import { unstable_cache as nextCache, revalidateTag } from 'next/cache';
-import { randomUUID } from 'crypto';
 
 // Helper to get the D1 binding.
 export function getD1Binding(): D1Database {
@@ -96,7 +95,7 @@ export class D1Client extends BaseD1Client {
     async createPost(data: Omit<Post, 'id' | 'tenant_id' | 'updated_at' | 'created_at' | 'version'>): Promise<Post> {
         if (!this.tenantId) throw new Error('Cannot create post without a specific tenantId.');
         const newPost = PostSchema.parse({ 
-            id: `pst_${randomUUID()}`, 
+            id: `pst_${crypto.randomUUID()}`, 
             tenant_id: this.tenantId, 
             created_at: Math.floor(Date.now() / 1000), 
             updated_at: Math.floor(Date.now() / 1000), 
@@ -137,7 +136,7 @@ export class D1Client extends BaseD1Client {
         if(!finalTenantId) throw new Error('TenantId is required for deployment.');
 
         const newDeployment = DeploymentSchema.parse({ 
-            id: `dpl_${randomUUID()}`, 
+            id: `dpl_${crypto.randomUUID()}`, 
             tenant_id: finalTenantId, 
             created_at: Math.floor(Date.now() / 1000),
             ...data 
@@ -157,7 +156,7 @@ export class SuperAdminD1Client extends D1Client {
     }
     async createTenant(data: Omit<Tenant, 'id' | 'created_at'>): Promise<Tenant> {
         const newTenant = TenantSchema.parse({ 
-            id: `tnt_${randomUUID()}`, 
+            id: `tnt_${crypto.randomUUID()}`, 
             created_at: Math.floor(Date.now() / 1000),
             ...data 
         });
