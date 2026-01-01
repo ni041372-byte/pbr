@@ -2,7 +2,6 @@
 import { D1Database, D1Result } from '@cloudflare/workers-types';
 import { z } from 'zod';
 import { Tenant, TenantSchema, User, UserSchema, Post, PostSchema, Deployment, DeploymentSchema } from '../types/db';
-import { unstable_cache as nextCache, revalidateTag } from 'next/cache';
 
 // Helper to get the D1 binding.
 export function getD1Binding(): D1Database {
@@ -11,17 +10,6 @@ export function getD1Binding(): D1Database {
     }
     return process.env.DB as D1Database;
 }
-
-// Wrapper for nextCache to simplify usage
-const cache = <T>(
-    func: () => Promise<T>,
-    keys: string[],
-    tags: string[],
-    revalidate: number
-): Promise<T> => {
-    return nextCache(func, keys, { tags, revalidate })();
-};
-
 
 // Base D1 client
 class BaseD1Client {
@@ -53,45 +41,39 @@ export class D1Client extends BaseD1Client {
     private bindTenantId = (params: any[]): any[] => this.tenantId ? [...params, this.tenantId] : params;
     private getTenantIdCondition = (): string => this.tenantId === null ? 'tenant_id IS NULL' : 'tenant_id = ?';
 
-    // --- Cached Reads ---
+    // --- Reads (no caching) ---
     async getTenantById(id: string): Promise<Tenant | null> {
-        return cache(() => this.queryOne(TenantSchema, 'SELECT * FROM tenants WHERE id = ?', [id]),
-            [`tenant:${id}`], [`tenants`], 60);
+        return this.queryOne(TenantSchema, 'SELECT * FROM tenants WHERE id = ?', [id]);
     }
     
     async getUserById(id: string): Promise<User | null> {
         const sql = `SELECT * FROM users WHERE id = ? AND (${this.getTenantIdCondition()})`;
-        return cache(() => this.queryOne(UserSchema, sql, this.bindTenantId([id])),
-            [`user:${id}`], [`users`, `tenant:${this.tenantId}`], 60);
+        return this.queryOne(UserSchema, sql, this.bindTenantId([id]));
     }
 
     async getUserByEmail(email: string): Promise<User | null> {
         const sql = `SELECT * FROM users WHERE email = ? AND (${this.getTenantIdCondition()})`;
-        return cache(() => this.queryOne(UserSchema, sql, this.bindTenantId([email])),
-            [`user-by-email:${email}`], [`users`, `tenant:${this.tenantId}`], 10);
+        return this.queryOne(UserSchema, sql, this.bindTenantId([email]));
     }
 
     async getPostById(id: string): Promise<Post | null> {
         if (!this.tenantId) return null;
         const sql = `SELECT * FROM posts WHERE id = ? AND tenant_id = ?`;
-        return cache(() => this.queryOne(PostSchema, sql, [id, this.tenantId]),
-            [`post:${id}`], [`posts`, `tenant:${this.tenantId}`], 60);
+        return this.queryOne(PostSchema, sql, [id, this.tenantId]);
     }
 
     async getPostsByTenant(): Promise<Post[]> {
         if (!this.tenantId) return [];
-        return cache(() => this.query(PostSchema, 'SELECT * FROM posts WHERE tenant_id = ? ORDER BY updated_at DESC', [this.tenantId]),
-            [`posts-for-tenant:${this.tenantId}`], [`posts`, `tenant:${this.tenantId}`], 60);
+        return this.query(PostSchema, 'SELECT * FROM posts WHERE tenant_id = ? ORDER BY updated_at DESC', [this.tenantId]);
     }
 
     async getPostBySlug(slug: string): Promise<Post | null> {
         if (!this.tenantId) return null;
         const sql = `SELECT * FROM posts WHERE slug = ? AND tenant_id = ?`;
-        return cache(() => this.queryOne(PostSchema, sql, [slug, this.tenantId]),
-            [`post-by-slug:${this.tenantId}:${slug}`], [`posts`, `tenant:${this.tenantId}`], 60);
+        return this.queryOne(PostSchema, sql, [slug, this.tenantId]);
     }
 
-    // --- Writes (now returns the created/updated object) ---
+    // --- Writes (returns the created/updated object) ---
     async createPost(data: Omit<Post, 'id' | 'tenant_id' | 'updated_at' | 'created_at' | 'version'>): Promise<Post> {
         if (!this.tenantId) throw new Error('Cannot create post without a specific tenantId.');
         const newPost = PostSchema.parse({ 
@@ -123,8 +105,6 @@ export class D1Client extends BaseD1Client {
         const result = await this.run(sql, params);
         if (result.meta.changes === 0) throw new Error('Optimistic locking failed: Post was modified by another user or does not exist.');
 
-        // Invalidate cache and return the freshly updated post
-        revalidateTag(`post:${id}`);
         const updatedPost = await this.getPostById(id);
         if (!updatedPost) throw new Error('Failed to retrieve post after update.');
 
@@ -166,13 +146,4 @@ export class SuperAdminD1Client extends D1Client {
         
         return newTenant;
     }
-}
-
-// Cached function for Middleware/Edge
-export async function getTenantByHostnameEdge(db: D1Database, hostname: string): Promise<Tenant | null> {
-    const fn = async () => {
-        const tenant = await db.prepare('SELECT id, slug, custom_domain, status FROM tenants WHERE custom_domain = ?').bind(hostname).first<Tenant>();
-        return tenant ? TenantSchema.parse(tenant) : null;
-    };
-    return cache(fn, [`tenant-by-hostname:${hostname}`], [`tenants`], 300); // Cache for 5 minutes
 }

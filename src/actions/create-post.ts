@@ -48,8 +48,8 @@ export async function createPost(formData: FormData): Promise<ActionResult> {
             last_published_at: null,
         });
 
-        // Revalidate the data cache for the tenant's posts list - This was causing a build error.
-        // revalidateTag(`posts-for-tenant:${tenantId}`);
+        // Revalidate the data cache for the tenant's posts list
+        revalidateTag(`posts-for-tenant:${tenantId}`);
         // Revalidate the admin page path to reflect changes immediately in the UI
         revalidatePath('/admin');
 

@@ -58,13 +58,13 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
         }
         
         // Revalidate data caches
-        // Revalidate data caches (commented out to fix build error)
-        // revalidateTag(`posts-for-tenant:${tenantId}`);
-        // revalidateTag(`post:${postId}`);
-        // revalidateTag(`post-by-slug:${tenantId}:${slug}`);
-        // if (slug !== currentPost.slug) {
-        //     revalidateTag(`post-by-slug:${tenantId}:${currentPost.slug}`);
-        // }
+        // Revalidate data caches
+        revalidateTag(`posts-for-tenant:${tenantId}`);
+        revalidateTag(`post:${postId}`);
+        revalidateTag(`post-by-slug:${tenantId}:${slug}`);
+        if (slug !== currentPost.slug) {
+            revalidateTag(`post-by-slug:${tenantId}:${currentPost.slug}`);
+        }
 
         // Revalidate path caches
         revalidatePath('/admin');
