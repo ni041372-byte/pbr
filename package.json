@@ -15,7 +15,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "npx @opennextjs/cloudflare build",
+    "build": "npx @opennextjs/cloudflare build --yes",
     "start": "next start"
   },
   "devDependencies": {
