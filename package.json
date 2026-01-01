@@ -15,7 +15,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "npx @opennextjs/cloudflare build --openNextConfigPath ./open-next.config.js",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' npx @opennextjs/cloudflare build --openNextConfigPath ./open-next.config.js",
     "start": "next start"
   },
   "devDependencies": {
