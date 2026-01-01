@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // 1. 빌드 중 ESLint 검사 무시 (메모리 절약)
+  // 12
   eslint: {
     ignoreDuringBuilds: true,
   },
