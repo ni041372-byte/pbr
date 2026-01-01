@@ -72,9 +72,8 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
 		
         originalStatus = post.status;
 
-        await d1Client.updatePost(postId, { status: 'PUBLISHING' }, post.version);
-        post = await d1Client.getPostById(postId);
-        if (!post) throw new Error("Post disappeared after status update.");
+        // Update post status to 'PUBLISHING' and get the updated post object back
+        post = await d1Client.updatePost(postId, { status: 'PUBLISHING' }, post.version);
 
         const [owner, repo] = tenant.github_repo.split('/');
         if (!owner || !repo) throw new Error(`Invalid GitHub repository format: ${tenant.github_repo}`);
@@ -113,6 +112,7 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
 		}
 
         deploymentStatus = 'SUCCESS';
+        // Final status update
         await d1Client.updatePost(postId, { status: 'PUBLISHED', last_published_at: Math.floor(Date.now() / 1000) }, post.version);
 
 		return new Response(JSON.stringify({ success: true, message: `Post "${post.title}" published successfully.` }), { headers: { 'Content-Type': 'application/json' }});
@@ -121,6 +121,7 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
         console.error(`[Worker] Error publishing post ${postId}:`, error);
         if (post && originalStatus) {
             try {
+                // Rollback to the original status using the last known version
                 await d1Client.updatePost(post.id, { status: originalStatus }, post.version);
             } catch (rollbackError) {
                 console.error(`[Worker] Failed to rollback post status for ${post.id}:`, rollbackError);

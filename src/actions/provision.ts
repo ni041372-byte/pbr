@@ -66,8 +66,7 @@ export async function provisionNewTenant(params: ProvisionParams): Promise<Provi
         const dnsVerificationValue = `placeholder-verification-value-for-${requestedDomain}`;
 
         // 3. Create the new tenant record in D1
-        await d1Admin.createTenant({
-            id: newTenantId,
+        const newTenant = await d1Admin.createTenant({
             slug: slug,
             custom_domain: requestedDomain,
             github_repo: newRepoFullName,
@@ -78,7 +77,7 @@ export async function provisionNewTenant(params: ProvisionParams): Promise<Provi
 
         return { 
             success: true,
-            tenantId: newTenantId,
+            tenantId: newTenant.id,
             dnsRecords: {
                 type: 'TXT',
                 name: '_cf-custom-hostname.' + requestedDomain,

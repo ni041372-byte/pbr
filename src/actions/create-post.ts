@@ -39,7 +39,7 @@ export async function createPost(formData: FormData): Promise<ActionResult> {
             return { success: false, message: 'This slug is already in use. Please choose a unique one.' };
         }
 
-        const result = await d1Client.createPost({
+        const newPost = await d1Client.createPost({
             title,
             slug,
             content_md,
@@ -48,17 +48,8 @@ export async function createPost(formData: FormData): Promise<ActionResult> {
             last_published_at: null,
         });
 
-        if (!result.success) {
-             throw new Error(result.error ?? 'D1 operation failed');
-        }
-
-        const newPost = await d1Client.getPostBySlug(slug);
-        if (!newPost) {
-            throw new Error('Failed to retrieve the newly created post.');
-        }
-        
         // Revalidate the data cache for the tenant's posts list
-        revalidateTag(`posts-for-tenant:${tenantId}`, "max");
+        revalidateTag(`posts-for-tenant:${tenantId}`);
         // Revalidate the admin page path to reflect changes immediately in the UI
         revalidatePath('/admin');
 

@@ -42,27 +42,42 @@ export class D1Client extends BaseD1Client {
     }
 
     // --- Writes ---
-    async updatePost(id: string, data: Partial<Omit<Post, 'id' | 'tenant_id' | 'created_at'>>, expectedVersion: number): Promise<D1Result> {
+    async updatePost(id: string, data: Partial<Omit<Post, 'id' | 'tenant_id' | 'created_at'>>, expectedVersion: number): Promise<Post> {
         if (!this.tenantId) throw new Error('Cannot update post without a specific tenantId.');
         const fields = Object.keys(data).map(key => `${key} = ?`);
         if (fields.length === 0) throw new Error('No fields provided for update.');
 
-        const params = [...Object.values(data), Math.floor(Date.now() / 1000), expectedVersion + 1, id, this.tenantId, expectedVersion];
+        const newVersion = expectedVersion + 1;
+        const newUpdatedAt = Math.floor(Date.now() / 1000);
+
+        const params = [...Object.values(data), newUpdatedAt, newVersion, id, this.tenantId, expectedVersion];
         const sql = `UPDATE posts SET ${fields.join(', ')}, updated_at = ?, version = ? WHERE id = ? AND tenant_id = ? AND version = ?`;
         
         const result = await this.run(sql, params);
         if (result.meta.changes === 0) throw new Error('Optimistic locking failed: Post was modified by another user or does not exist.');
-        return result;
+
+        // Return the freshly updated post
+        const updatedPost = await this.getPostById(id);
+        if (!updatedPost) throw new Error('Failed to retrieve post after update.');
+
+        return updatedPost;
     }
     
-    async createDeployment(data: Omit<Deployment, 'id' | 'created_at'>): Promise<D1Result> {
+    async createDeployment(data: Omit<Deployment, 'id' | 'created_at'>): Promise<Deployment> {
         const id = crypto.randomUUID();
         const finalTenantId = this.tenantId ?? data.tenant_id;
         if(!finalTenantId) throw new Error('TenantId is required for deployment.');
 
-        const parsedData = DeploymentSchema.parse({ id, tenant_id: finalTenantId, ...data });
+        const newDeployment = DeploymentSchema.parse({ 
+            id, 
+            tenant_id: finalTenantId,
+            created_at: Math.floor(Date.now() / 1000),
+            ...data
+        });
 
-        return this.run(`INSERT INTO deployments (id, tenant_id, trigger_source, github_commit_sha, cf_deployment_id, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [parsedData.id, parsedData.tenant_id, parsedData.trigger_source, parsedData.github_commit_sha, parsedData.cf_deployment_id, parsedData.status, parsedData.created_at]);
+        await this.run(`INSERT INTO deployments (id, tenant_id, trigger_source, github_commit_sha, cf_deployment_id, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [newDeployment.id, newDeployment.tenant_id, newDeployment.trigger_source, newDeployment.github_commit_sha, newDeployment.cf_deployment_id, newDeployment.status, newDeployment.created_at]);
+
+        return newDeployment;
     }
 }
