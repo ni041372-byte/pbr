@@ -22,11 +22,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       # 의존성 설치
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       # 빌드 실행 (GitHub 서버의 7GB 램을 사용하므로 OOM 걱정 없음)
       - name: Build Next.js App
