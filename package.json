@@ -15,10 +15,11 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "opennext build"
+    "build": "cloudflare-next build",
+    "start": "next start"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.14.7",
+    "@opennextjs/cloudflare": "^0.2.0",
     "@types/react": "^18.2.25",
     "@cloudflare/workers-types": "^4.20240405.0",
     "typescript": "^5.4.5"
