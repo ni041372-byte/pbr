@@ -3,9 +3,8 @@ import * as aws4 from 'aws4';
 import { D1Client } from './d1';
 import type { Post } from './types';
 import { Buffer } from 'node:buffer';
-// @ts-ignore
-import { get_file_contents, create_or_update_file } from "github";
 
+const GITHUB_API_BASE = 'https://api.github.com';
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -21,7 +20,7 @@ export default {
 			return new Response('Not found', { status: 404 });
 		} catch (e: any) {
 			console.error("Error in worker:", e);
-			return new Response(JSON.stringify({ success: false, message: e.message }), { 
+			return new Response(JSON.stringify({ success: false, message: e.message, stack: e.stack }), { 
 				status: 500,
 				headers: { 'Content-Type': 'application/json' }
 			});
@@ -29,11 +28,33 @@ export default {
 	},
 };
 
+async function githubAPI(path: string, method: string, token: string, body?: object) {
+    const response = await fetch(`${GITHUB_API_BASE}${path}`, {
+        method,
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'User-Agent': 'endpr.dev-pbr-worker',
+            'Content-Type': 'application/json',
+        },
+        body: body ? JSON.stringify(body) : undefined,
+    });
+    if (!response.ok && response.status !== 404) {
+        const errorText = await response.text();
+        throw new Error(`GitHub API Error on ${method} ${path}: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+    return response;
+}
+
 async function handlePublishRequest(request: Request, env: Env): Promise<Response> {
     const { postId, tenantId } = await request.json();
     if (!postId || !tenantId) {
         return new Response(JSON.stringify({ success: false, message: 'postId and tenantId are required' }), { status: 400, headers: { 'Content-Type': 'application/json' }});
     }
+
+	if (!env.GITHUB_TOKEN) {
+		throw new Error("GITHUB_TOKEN secret is not set.");
+	}
 
 	const d1Client = new D1Client(env.DB, tenantId);
 
@@ -43,7 +64,6 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
     let commitSha: string | null = null;
 
 	try {
-		// 1. Fetch post and tenant details from D1
         post = await d1Client.getPostById(postId);
         if (!post) throw new Error('Post not found.');
 		
@@ -52,12 +72,10 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
 		
         originalStatus = post.status;
 
-		// 2. Update post status to 'PUBLISHING'
         await d1Client.updatePost(postId, { status: 'PUBLISHING' }, post.version);
-        post = await d1Client.getPostById(postId); // Re-fetch for new version number
+        post = await d1Client.getPostById(postId);
         if (!post) throw new Error("Post disappeared after status update.");
 
-		// 3. Perform GitHub API call
         const [owner, repo] = tenant.github_repo.split('/');
         if (!owner || !repo) throw new Error(`Invalid GitHub repository format: ${tenant.github_repo}`);
 
@@ -66,25 +84,27 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
         const commitMessage = `Update post: ${post.title}`;
         const branch = 'main';
 
+		// 1. Get file SHA using GitHub API
         let fileSha: string | undefined;
-        try {
-            const fileContents = await get_file_contents({ owner, repo, path: filePath, branch });
-            if (fileContents && 'sha' in fileContents) {
-                fileSha = fileContents.sha;
-            }
-        } catch (error: any) {
-            if (error.status !== 404) throw error;
-        }
+		const fileContentsResponse = await githubAPI(`/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`, 'GET', env.GITHUB_TOKEN);
+		
+		if (fileContentsResponse.status === 200) {
+			const fileContents = await fileContentsResponse.json();
+			fileSha = fileContents.sha;
+		} else if (fileContentsResponse.status !== 404) {
+			throw new Error(`Failed to get file contents: ${fileContentsResponse.statusText}`);
+		}
 
-        const fileUpdateResult = await create_or_update_file({
-            owner,
-            repo,
-            path: filePath,
-            content: Buffer.from(mdxContent).toString('base64'),
-            message: commitMessage,
-            branch,
-            sha: fileSha,
-        });
+		// 2. Create or update file using GitHub API
+		const updateBody = {
+			message: commitMessage,
+			content: Buffer.from(mdxContent).toString('base64'),
+			branch,
+			sha: fileSha, // If sha is undefined, this is a new file
+		};
+
+		const fileUpdateResponse = await githubAPI(`/repos/${owner}/${repo}/contents/${filePath}`, 'PUT', env.GITHUB_TOKEN, updateBody);
+		const fileUpdateResult = await fileUpdateResponse.json();
 
         if (fileUpdateResult?.commit?.sha) {
             commitSha = fileUpdateResult.commit.sha;
@@ -92,7 +112,6 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
 			throw new Error('GitHub file update failed. No commit SHA returned.');
 		}
 
-		// 4. Update post status to 'PUBLISHED'
         deploymentStatus = 'SUCCESS';
         await d1Client.updatePost(postId, { status: 'PUBLISHED', last_published_at: Math.floor(Date.now() / 1000) }, post.version);
 
@@ -100,7 +119,6 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
 
 	} catch (error: any) {
         console.error(`[Worker] Error publishing post ${postId}:`, error);
-        // Rollback post status
         if (post && originalStatus) {
             try {
                 await d1Client.updatePost(post.id, { status: originalStatus }, post.version);
@@ -108,10 +126,8 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
                 console.error(`[Worker] Failed to rollback post status for ${post.id}:`, rollbackError);
             }
         }
-        // Re-throw the error to be caught by the main fetch handler
         throw error;
     } finally {
-		// 5. Log deployment attempt
         try {
             await d1Client.createDeployment({
                 tenant_id: tenantId,
@@ -128,7 +144,6 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
 
 
 async function handlePresignedUrlRequest(request: Request, env: Env): Promise<Response> {
-	// Mock tenantId for now, in a real app this would come from an auth system
 	const tenantId = 'dev-tenant';
 
 	const { filename, contentType } = await request.json();
@@ -142,10 +157,10 @@ async function handlePresignedUrlRequest(request: Request, env: Env): Promise<Re
 	const key = `${tenantId}/${new Date().getFullYear()}/${(new Date().getMonth() + 1).toString().padStart(2, '0')}/${crypto.randomUUID()}-${filename}`;
 
 	const presignedUrl = await createPresignedUrl({
-		bucketName: env.R2_ASSETS.bucket,
+		bucketName: 'endpr-assets',
 		key,
 		method: 'PUT',
-		expiresIn: 300, // 5 minutes
+		expiresIn: 300,
 		env: env,
 	});
 
@@ -160,7 +175,7 @@ async function createPresignedUrl({ bucketName, key, method, expiresIn, env }: {
 	const accountId = env.CLOUDFLARE_ACCOUNT_ID;
 
     if (!accessKeyId || !secretAccessKey || !accountId) {
-        throw new Error('R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY and CLOUDFLARE_ACCOUNT_ID environment variables are required.');
+        throw new Error('R2 secrets and/or Account ID are not configured for the worker.');
     }
 
 	const url = new URL(`https://${accountId}.r2.cloudflarestorage.com/${bucketName}/${key}`);
@@ -177,7 +192,7 @@ async function createPresignedUrl({ bucketName, key, method, expiresIn, env }: {
 		secretAccessKey: secretAccessKey,
 	});
 
-	return new URL(`https://${signedRequest.hostname}${signedRequest.path}`).toString();
+	return new URL(`httpshttps://${signedRequest.hostname}${signedRequest.path}`).toString();
 }
 
 interface Env {
@@ -186,4 +201,5 @@ interface Env {
 	R2_ACCESS_KEY_ID: string;
 	R2_SECRET_ACCESS_KEY: string;
 	CLOUDFLARE_ACCOUNT_ID: string;
+	GITHUB_TOKEN: string;
 }
