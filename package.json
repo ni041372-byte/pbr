@@ -15,7 +15,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "npx @opennextjs/cloudflare build",
+    "build": "npx @opennextjs/cloudflare build --openNextConfigPath ./open-next.config.ts",
     "start": "next start"
   },
   "devDependencies": {
