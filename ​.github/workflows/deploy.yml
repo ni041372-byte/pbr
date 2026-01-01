@@ -1,0 +1,48 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: ["feature/phase1-4-implementation"] # 작업 중인 브랜치 이름 확인!
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Cloudflare Pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node.js 설정 (메모리 넉넉한 환경)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # 의존성 설치
+      - name: Install Dependencies
+        run: npm ci
+
+      # 빌드 실행 (GitHub 서버의 7GB 램을 사용하므로 OOM 걱정 없음)
+      - name: Build Next.js App
+        run: npm run build
+        env:
+          # 리눅스 환경에 맞는 메모리 옵션 설정
+          NODE_OPTIONS: "--max_old_space_size=6144"
+
+      # Cloudflare Pages로 결과물 전송 (배포)
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: pbr # Cloudflare에 만들어둔 프로젝트 이름 (로그에 'pbr'로 확인됨)
+          directory: .open-next/assets # OpenNext의 빌드 결과물 경로
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: feature/phase1-4-implementation # 배포될 브랜치 명시
+          wranglerVersion: '3'
