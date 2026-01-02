@@ -3,6 +3,8 @@ import { getSession } from "@/lib/auth";
 import { redirect } from 'next/navigation';
 import ProvisionForm from './provision-form';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProvisionPage() {
     const session = await getSession();
 
