@@ -163,10 +163,18 @@ export class SuperAdminD1Client extends D1Client {
     }
 }
 
-// Placeholder for getTenantByHostnameEdge to resolve the import error in middleware.ts
-// The actual implementation would go here if needed.
-export function getTenantByHostnameEdge(hostname: string): string | null {
-    // This is a placeholder. Implement actual logic if needed.
-    console.warn("getTenantByHostnameEdge called in mock/placeholder. No actual tenant resolution.");
-    return null;
+export async function getTenantByHostnameEdge(db: D1Database, hostname: string): Promise<Tenant | null> {
+    const slug = hostname.split('.')[0]; // Simplistic slug extraction
+
+    // First, try to find by custom domain
+    let tenant = await new BaseD1Client(db).queryOne(TenantSchema, 'SELECT * FROM tenants WHERE custom_domain = ?', [hostname]);
+    
+    if (tenant) {
+        return tenant;
+    }
+    
+    // If not found, try to find by slug
+    tenant = await new BaseD1Client(db).queryOne(TenantSchema, 'SELECT * FROM tenants WHERE slug = ?', [slug]);
+
+    return tenant;
 }
