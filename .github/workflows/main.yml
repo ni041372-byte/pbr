@@ -41,7 +41,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: pbr # Cloudflare에 만들어둔 프로젝트 이름 (로그에 'pbr'로 확인됨)
-          directory: .open-next/assets # OpenNext의 빌드 결과물 경로
+          directory: .open-next # OpenNext의 빌드 결과물 경로
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: feature/phase1-4-implementation # 배포될 브랜치 명시
           wranglerVersion: '3'
