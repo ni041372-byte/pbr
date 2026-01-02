@@ -15,8 +15,8 @@
   },
 "scripts": {
   "dev": "next dev",
-  "build": "next build",  <-- 원래대로 되돌림 (중요!)
-  "build:cf": "npx @opennextjs/cloudflare build --openNextConfigPath ./open-next.config.js", <-- 새로운 이름 부여
+  "build": "next build",
+  "build:cf": "npx @opennextjs/cloudflare build --openNextConfigPath ./open-next.config.js",
   "start": "next start"
 },
 
