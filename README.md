@@ -3,7 +3,7 @@
 This project is a multi-tenant headless CMS built with Next.js and Cloudflare. It is designed for agencies to manage hundreds of client websites from a single instance.
 
 ## ✨ Core Features
-
+.
 *   **Multi-Tenant Architecture:** Each tenant (client) has its own isolated data and configuration, identified by hostname.
 *   **Headless CMS:** Content is managed in a central admin panel and delivered via a Git-based workflow.
 *   **Static Site Generation (SSG) for Performance:** Published content is served as a static site for maximum speed.
