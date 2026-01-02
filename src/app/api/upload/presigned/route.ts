@@ -5,6 +5,9 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { randomUUID } from 'crypto';
 
+export const dynamic = 'force-dynamic';
+
+
 // This endpoint generates a presigned URL for uploading a file to R2.
 export async function POST(request: Request) {
     const session = await getSession();
