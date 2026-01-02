@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { PostActions } from "./post-actions";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminDashboard() {
     const session = await getSession();
 
