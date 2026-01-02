@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import PostForm from '../post-form';
 import { createPost } from '@/actions/create-post';
 
+export const dynamic = 'force-dynamic';
+
 export default async function NewPostPage() {
     const session = await getSession();
 
