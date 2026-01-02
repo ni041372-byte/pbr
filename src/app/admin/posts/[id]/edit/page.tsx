@@ -5,6 +5,8 @@ import PostForm from '../../post-form';
 import { updatePost } from '@/actions/update-post';
 import { D1Client, getD1Binding } from "@/lib/d1";
 
+export const dynamic = 'force-dynamic';
+
 interface EditPostPageProps {
     params: {
         id: string;
