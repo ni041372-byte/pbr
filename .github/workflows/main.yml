@@ -34,6 +34,13 @@ jobs:
           # 리눅스 환경에 맞는 메모리 옵션 설정
           NODE_OPTIONS: "--max_old_space_size=6144"
 
+      # OpenNext가 생성한 worker 파일이 Pages에서 기대하는 이름으로 존재하도록 정규화
+      - name: Normalize worker filename
+        run: |
+          if [ -f .open-next/worker.js ] && [ ! -f .open-next/_worker.js ]; then
+            cp .open-next/worker.js .open-next/_worker.js
+          fi
+
       # Cloudflare Pages에 필요한 라우트 파일을 빌드 결과물에 포함
       - name: Copy _routes.json to build output
         run: cp _routes.json .open-next/
