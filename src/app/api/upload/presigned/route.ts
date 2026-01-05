@@ -4,13 +4,13 @@ import { getSession } from '@/lib/auth';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { randomUUID } from 'crypto';
+import { D1Database } from '@cloudflare/workers-types';
 
 export const dynamic = 'force-dynamic';
 
-
 // This endpoint generates a presigned URL for uploading a file to R2.
-export async function POST(request: Request) {
-    const session = await getSession();
+export async function POST(request: Request, context: { env: { DB: D1Database } }) {
+    const session = await getSession(context.env);
     if (!session?.user?.tenant_id) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

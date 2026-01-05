@@ -1,8 +1,14 @@
 // src/lib/auth.ts
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-//...
-export const getSession = async () => {
+import { buildAuthOptions } from "@/auth.config";
+import { D1Client, getD1Binding, SuperAdminD1Client } from "@/lib/d1";
+import { D1Database } from "@cloudflare/workers-types";
+
+// This new getSession requires the env to be passed in from the runtime context.
+export const getSession = async (env: { DB: D1Database }) => {
+    const db = getD1Binding(env);
+    const d1Client = new SuperAdminD1Client(db);
+    const authOptions = buildAuthOptions(d1Client);
     return await getServerSession(authOptions);
 }
 
@@ -10,8 +16,8 @@ export const getSession = async () => {
  * Retrieves the tenantId for the currently authenticated user.
  * It's a convenience function to be used in Server Actions and Components.
  */
-export const getTenantId = async (db: D1Client): Promise<string | null> => {
-    const session = await getSession();
+export const getTenantId = async (db: D1Client, env: { DB: D1Database }): Promise<string | null> => {
+    const session = await getSession(env);
 
     if (!session?.user?.email) {
         // Not authenticated

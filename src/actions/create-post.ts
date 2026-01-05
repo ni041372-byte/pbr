@@ -6,6 +6,7 @@ import { Post } from '@/types/db';
 import { getSession } from '@/lib/auth';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { D1Database } from '@cloudflare/workers-types';
 
 interface ActionResult {
     success: boolean;
@@ -14,7 +15,13 @@ interface ActionResult {
 }
 
 export async function createPost(formData: FormData): Promise<ActionResult> {
-    const session = await getSession();
+    const env = (globalThis as any).env as { DB: D1Database };
+    if (!env) {
+        console.error("Server environment with D1 binding not available in action.");
+        return { success: false, message: 'Server environment not configured.' };
+    }
+
+    const session = await getSession(env);
     const tenantId = formData.get('tenantId') as string;
 
     if (!session?.user || session.user.tenant_id !== tenantId) {
@@ -30,7 +37,7 @@ export async function createPost(formData: FormData): Promise<ActionResult> {
     }
 
     try {
-        const db = getD1Binding();
+        const db = getD1Binding(env);
         const d1Client = new D1Client(db, tenantId);
 
         // Check if slug is unique for the tenant
