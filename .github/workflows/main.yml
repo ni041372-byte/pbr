@@ -38,10 +38,18 @@ jobs:
       - name: Prepare Pages publish directory
         run: |
           mkdir -p .open-next
-          if [ -f .open-next/worker.js ] && [ ! -f .open-next/_worker.js ]; then
-            cp .open-next/worker.js .open-next/_worker.js
+          # 워커 산출물을 탐색해서 _worker.js 로 복사
+          WORKER_SRC=""
+          if [ -f .open-next/_worker.js ]; then
+            WORKER_SRC=".open-next/_worker.js"
+          elif [ -f .open-next/worker.js ]; then
+            WORKER_SRC=".open-next/worker.js"
+          else
+            WORKER_SRC="$(find .open-next -maxdepth 3 -name '*worker*.js' | head -n 1 || true)"
           fi
-          if [ ! -f .open-next/_worker.js ]; then
+          if [ -n "$WORKER_SRC" ] && [ -f "$WORKER_SRC" ]; then
+            cp "$WORKER_SRC" .open-next/_worker.js
+          else
             echo "OpenNext 워커 산출물이 없습니다. .open-next 내용을 확인하세요:"
             ls -la .open-next || true
             exit 1
@@ -57,6 +65,9 @@ jobs:
         run: |
           test -f .open-next/_worker.js
           test -f .open-next/_routes.json
+          if [ -d .open-next/static/_next ] && [ ! -d .open-next/_next ]; then
+            rsync -a .open-next/static/_next/ .open-next/_next/
+          fi
           test -d .open-next/_next
 
       # Cloudflare Pages로 결과물 전송 (배포)
