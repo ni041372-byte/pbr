@@ -210,6 +210,6 @@ interface Env {
 	R2_SECRET_ACCESS_KEY: string;
 	CLOUDFLARE_ACCOUNT_ID: string;
 	GITHUB_TOKEN: string;
-\tWORKER_SHARED_SECRET: string;
+	WORKER_SHARED_SECRET: string;
 }
 
