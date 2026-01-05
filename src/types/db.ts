@@ -21,7 +21,7 @@ export const UserSchema = z.object({
     id: z.string().uuid().or(z.literal('super-admin-user').or(z.literal('dev-tenant-user'))), // Allow specific test IDs
     tenant_id: z.string().uuid().nullable(), // Null for Super Admin
     email: z.string().email(),
-    role: z.enum(['OWNER', 'EDITOR', 'VIEWER']).default('EDITOR'),
+    role: z.enum(['OWNER', 'EDITOR', 'VIEWER', 'SUPER_ADMIN']).default('EDITOR'),
     created_at: zUnixEpoch.default(() => Math.floor(Date.now() / 1000)),
 });
 
