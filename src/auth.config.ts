@@ -37,19 +37,39 @@ export const buildAuthOptions = (d1Client: SuperAdminD1Client): NextAuthOptions 
           password: { label: "Password", type: "password" }
         },
         async authorize(credentials, req) {
-          if (!credentials?.email || !credentials?.password) {
+          const email = credentials?.email;
+          const password = credentials?.password;
+
+          if (!email || !password) {
+            console.warn("[auth] Missing credentials in authorize", { hasEmail: !!email, hasPassword: !!password });
             throw new Error("Email and password required");
           }
-          const user = await d1Client.getUserByEmailAny(credentials.email);
-          if (user && credentials.password === "password") { // MOCK PASSWORD CHECK
-            return {
-              id: user.id,
-              email: user.email,
-              role: user.role,
-              tenant_id: user.tenant_id
-            };
+
+          const user = await d1Client.getUserByEmailAny(email);
+
+          console.log("[auth] CredentialsProvider lookup result", {
+            email,
+            found: !!user,
+            userId: user?.id,
+            role: user?.role,
+            tenant_id: user?.tenant_id
+          });
+
+          if (!user) {
+            return null;
           }
-          return null;
+
+          if (password !== "password") { // MOCK PASSWORD CHECK
+            console.warn("[auth] Invalid password for credentials login", { email });
+            return null;
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            tenant_id: user.tenant_id
+          };
         }
       })
     ],
