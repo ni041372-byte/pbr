@@ -16,7 +16,7 @@
 "scripts": {
   "dev": "next dev",
   "build": "next build",
-  "build:cf": "npx @opennextjs/cloudflare build --openNextConfigPath ./open-next.config.js",
+  "build:cf": "npx @opennextjs/cloudflare build --openNextConfigPath ./open-next.config.js && ls -R .open-next",
   "start": "next start"
 },
 
