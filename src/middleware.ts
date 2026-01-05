@@ -28,7 +28,7 @@ export const config = {
   ],
 };
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest, event: { env: { DB: D1Database } }) {
   console.log(`[Middleware] Starting for request: ${request.nextUrl.pathname}`);
   const headers = new Headers(request.headers);
   const hostname = request.headers.get('host') || 'localhost';
@@ -36,7 +36,7 @@ export async function middleware(request: NextRequest) {
 
   // For local development, wrangler binds the D1 instance to the `process.env`
   // In production, it's available in the execution context.
-  const db = getD1Binding();
+  const db = getD1Binding(event.env);
   console.log(`[Middleware] D1 binding retrieved. Type: ${typeof db}`);
 
   try {

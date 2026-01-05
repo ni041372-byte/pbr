@@ -4,26 +4,11 @@ import { z } from 'zod';
 import { Tenant, TenantSchema, User, UserSchema, Post, PostSchema, Deployment, DeploymentSchema } from '../types/db';
 
 // Helper to get the D1 binding.
-export function getD1Binding(): D1Database {
-    // Check if D1 binding is available, otherwise provide a mock for build/dev environments
-    if (typeof process !== 'undefined' && (process.env.NODE_ENV === 'development' || process.env.CI)) {
-        console.warn("D1 binding (process.env.DB) is not available. Providing a mock D1Database for build/dev.");
-        // Basic mock for D1Database that prevents build errors
-        return {
-            prepare: () => ({
-                bind: () => ({
-                    all: async () => ({ results: [] as any[], success: true }),
-                    first: async () => null,
-                    run: async () => ({ success: true, changes: 0, lastRowId: null, duration: 0 })
-                })
-            })
-        } as D1Database; // Cast to D1Database to satisfy type checking
+export function getD1Binding(env: { DB: D1Database }): D1Database {
+    if (!env.DB) {
+        throw new Error("D1 binding (env.DB) is not available.");
     }
-
-    if (!process.env.DB) {
-        throw new Error("D1 binding (process.env.DB) is not available.");
-    }
-    return process.env.DB as D1Database;
+    return env.DB as D1Database;
 }
 
 // Base D1 client
