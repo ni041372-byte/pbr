@@ -93,8 +93,12 @@ This guide will walk you through deploying the `endpr` project to Cloudflare Pag
         VALUES ('super-admin-user-prod', NULL, 'your-email@example.com', 'OWNER');
         ```
         (Replace `your-email@example.com` with your email)
+    *   **로그인 비밀번호(중요):**
+        *   현재 `src/auth.config.ts`의 크리덴셜 프로바이더는 **모든 계정의 비밀번호를 `"password"`로 간주**합니다.
+        *   위에서 입력한 이메일로 로그인 시 비밀번호를 `password`로 입력하면 됩니다.
+        *   추후 운영 환경에서는 `src/auth.config.ts`의 비밀번호 검증 로직을 실제 저장소/해시 검증으로 교체하거나 시크릿 기반으로 강화하세요.
 
-## ?���?Local Development
+## Local Development
 
 While the primary workflow is deployment-based, you can still run the project locally.
 
