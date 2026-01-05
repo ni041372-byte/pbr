@@ -37,8 +37,14 @@ jobs:
       # 배포 디렉터리(.open-next)에 Pages가 기대하는 워커/라우트 파일을 배치
       - name: Prepare Pages publish directory
         run: |
+          mkdir -p .open-next
           if [ -f .open-next/worker.js ] && [ ! -f .open-next/_worker.js ]; then
-            mv .open-next/worker.js .open-next/_worker.js
+            cp .open-next/worker.js .open-next/_worker.js
+          fi
+          if [ ! -f .open-next/_worker.js ]; then
+            echo "OpenNext 워커 산출물이 없습니다. .open-next 내용을 확인하세요:"
+            ls -la .open-next || true
+            exit 1
           fi
           cp _routes.json .open-next/_routes.json
           # 정적 산출물을 최상위에 병합하여 Pages가 /_next/* 경로를 바로 서빙하도록 정리
