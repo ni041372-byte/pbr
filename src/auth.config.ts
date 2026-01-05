@@ -8,12 +8,18 @@ function resolveAuthSecret(): string {
   const secret = process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET;
   if (secret) return secret;
 
-  if (process.env.NODE_ENV === "production") {
-    throw new Error("AUTH_SECRET (or NEXTAUTH_SECRET) is required in production.");
+  const fallback = "dev-secret";
+  const message = "AUTH_SECRET/NEXTAUTH_SECRET not set; falling back to a dev-only secret.";
+
+  // 개발/프리뷰 환경에서는 동작을 지속하고 경고만 출력
+  if (process.env.NODE_ENV !== "production") {
+    console.warn(message);
+    return fallback;
   }
 
-  console.warn("AUTH_SECRET/NEXTAUTH_SECRET not set; falling back to a dev-only secret.");
-  return "dev-secret";
+  // Pages 배포에서 시크릿이 누락된 경우에도 500을 피하고 경고 로그를 남김
+  console.warn(`[WARN] ${message} 프로덕션에서는 환경변수를 설정하세요.`);
+  return fallback;
 }
 
 export const buildAuthOptions = (d1Client: SuperAdminD1Client): NextAuthOptions => {
