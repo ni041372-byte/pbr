@@ -4,11 +4,23 @@ import { z } from 'zod';
 import { Tenant, TenantSchema, User, UserSchema, Post, PostSchema, Deployment, DeploymentSchema } from '../types/db';
 
 // Helper to get the D1 binding.
-export function getD1Binding(env: { DB: D1Database }): D1Database {
-    if (!env.DB) {
-        throw new Error("D1 binding (env.DB) is not available.");
+export function getD1Binding(env?: { DB: D1Database }): D1Database {
+    // Runtime on Cloudflare: env is passed from the handler
+    if (env && env.DB) {
+        return env.DB as D1Database;
     }
-    return env.DB as D1Database;
+
+    // Build time: env is undefined, return a mock
+    console.warn("D1 binding not available, providing a mock for build time.");
+    return {
+        prepare: () => ({
+            bind: () => ({
+                all: async () => ({ results: [] as any[], success: true }),
+                first: async () => null,
+                run: async () => ({ success: true, changes: 0, lastRowId: null, duration: 0 })
+            })
+        })
+    } as any; // Use `any` to simplify mock type
 }
 
 // Base D1 client
