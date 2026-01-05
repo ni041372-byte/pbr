@@ -65,10 +65,19 @@ jobs:
         run: |
           test -f .open-next/_worker.js
           test -f .open-next/_routes.json
-          if [ -d .open-next/static/_next ] && [ ! -d .open-next/_next ]; then
-            rsync -a .open-next/static/_next/ .open-next/_next/
+          # _next 자산 위치 보정
+          if [ ! -d .open-next/_next ]; then
+            NEXT_SRC="$(find .open-next -maxdepth 4 -type d -name '_next' | head -n 1 || true)"
+            if [ -n "$NEXT_SRC" ] && [ -d "$NEXT_SRC" ] && [ "$NEXT_SRC" != ".open-next/_next" ]; then
+              rsync -a "$NEXT_SRC"/ .open-next/_next/
+            fi
           fi
-          test -d .open-next/_next
+          if [ ! -d .open-next/_next ]; then
+            echo "_next 정적 자산을 찾을 수 없습니다. .open-next 내용을 확인하세요:"
+            ls -la .open-next || true
+            find .open-next -maxdepth 3 -type d -name "_next" || true
+            exit 1
+          fi
 
       # Cloudflare Pages로 결과물 전송 (배포)
       - name: Publish to Cloudflare Pages
