@@ -41,12 +41,17 @@ jobs:
             mv .open-next/worker.js .open-next/_worker.js
           fi
           cp _routes.json .open-next/_routes.json
+          # 정적 산출물을 최상위에 병합하여 Pages가 /_next/* 경로를 바로 서빙하도록 정리
+          if [ -d .open-next/static ]; then
+            rsync -a .open-next/static/ .open-next/
+          fi
 
       # 배포 산출물에 필수 파일이 모두 존재하는지 확인
       - name: Verify OpenNext artifacts
         run: |
           test -f .open-next/_worker.js
           test -f .open-next/_routes.json
+          test -d .open-next/_next
 
       # Cloudflare Pages로 결과물 전송 (배포)
       - name: Publish to Cloudflare Pages
