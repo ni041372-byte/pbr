@@ -2,3 +2,8 @@ name = "pbr"
 compatibility_date = "2026-01-05"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".open-next"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "endpr-db"
+database_id = "f786c61f-1b1a-4c5b-8b8e-73cbd8965af7"
