@@ -2,7 +2,7 @@ name: Deploy to Cloudflare Pages
 
 on:
   push:
-    branches: ["codex/12-58-08"] # 작업 중인 브랜치 이름 확인!
+    branches: ["codex/17-28-42"] # 작업 중인 브랜치 이름 확인!
   workflow_dispatch:
 
 permissions:
@@ -88,5 +88,5 @@ jobs:
           projectName: pbr # Cloudflare에 만들어둔 프로젝트 이름 (로그에 'pbr'로 확인됨)
           directory: .open-next # OpenNext의 빌드 결과물 경로(정적 파일 및 워커 포함)
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: codex/12-58-08 # 배포될 브랜치 명시
+          branch: codex/17-28-42 # 배포될 브랜치 명시
           wranglerVersion: '3'
