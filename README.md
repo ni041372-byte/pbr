@@ -97,6 +97,7 @@ This guide will walk you through deploying the `endpr` project to Cloudflare Pag
         *   현재 `src/auth.config.ts`의 크리덴셜 프로바이더는 **모든 계정의 비밀번호를 `"password"`로 간주**합니다.
         *   위에서 입력한 이메일로 로그인 시 비밀번호를 `password`로 입력하면 됩니다.
         *   추후 운영 환경에서는 `src/auth.config.ts`의 비밀번호 검증 로직을 실제 저장소/해시 검증으로 교체하거나 시크릿 기반으로 강화하세요.
+    *   **NextAuth 시크릿 설정:** Pages/Workers 환경변수에 `NEXTAUTH_SECRET` 또는 `AUTH_SECRET`를 반드시 설정하세요. (로컬 개발은 기본 dev-secret으로 진행)
 
 ## Local Development
 
@@ -110,7 +111,6 @@ While the primary workflow is deployment-based, you can still run the project lo
     *   `npx wrangler dev --local --experimental-local-pages`
 
 This will start a local development server with live-reloading and access to your local D1 database.
-
 
 
 

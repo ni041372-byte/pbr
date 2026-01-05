@@ -4,6 +4,18 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { SuperAdminD1Client } from "@/lib/d1";
 import { CustomD1Adapter } from "@/lib/next-auth-d1-adapter";
 
+function resolveAuthSecret(): string {
+  const secret = process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET;
+  if (secret) return secret;
+
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("AUTH_SECRET (or NEXTAUTH_SECRET) is required in production.");
+  }
+
+  console.warn("AUTH_SECRET/NEXTAUTH_SECRET not set; falling back to a dev-only secret.");
+  return "dev-secret";
+}
+
 export const buildAuthOptions = (d1Client: SuperAdminD1Client): NextAuthOptions => {
   return {
     // @ts-ignore
@@ -53,7 +65,7 @@ export const buildAuthOptions = (d1Client: SuperAdminD1Client): NextAuthOptions 
         return session;
       }
     },
-    secret: process.env.AUTH_SECRET,
+    secret: resolveAuthSecret(),
     pages: {
       signIn: '/login',
     }
