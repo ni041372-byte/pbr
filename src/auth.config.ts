@@ -26,6 +26,9 @@ export const buildAuthOptions = (d1Client: SuperAdminD1Client): NextAuthOptions 
   return {
     // @ts-ignore
     adapter: CustomD1Adapter(d1Client),
+    // Cloudflare Pages + branch previews에서 Host 헤더가 변할 수 있으므로 신뢰하도록 설정
+    trustHost: true,
+    debug: true, // 인증 흐름을 로그에서 쉽게 추적
     session: {
       strategy: "jwt",
     },
