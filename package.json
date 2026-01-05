@@ -16,7 +16,7 @@
 "scripts": {
   "dev": "next dev",
   "build": "next build",
-  "build:cf": "npx @opennextjs/cloudflare build --openNextConfigPath ./open-next.config.js && echo '{\"version\": 1, \"include\": [\"/*\"], \"exclude\": [\"/favicon.ico\", \"/_next/static/*\"]}' > .open-next/_routes.json",
+  "build:cf": "npx @opennextjs/cloudflare build --openNextConfigPath ./open-next.config.js",
   "start": "next start"
 },
 
