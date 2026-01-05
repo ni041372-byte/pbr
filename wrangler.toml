@@ -1,11 +1,4 @@
 name = "pbr"
-compatibility_date = "2024-09-23"
+compatibility_date = "2026-01-05"
 compatibility_flags = ["nodejs_compat"]
-# 👇 아래 줄을 추가해주세요! (경고 해결용)
-main = ".open-next/worker.js" 
-
-[build]
-command = "npm run build"
-
-[site]
-bucket = ".open-next/assets"
+pages_build_output_dir = ".open-next"
