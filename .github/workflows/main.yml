@@ -34,6 +34,10 @@ jobs:
           # 리눅스 환경에 맞는 메모리 옵션 설정
           NODE_OPTIONS: "--max_old_space_size=6144"
 
+      # Cloudflare Pages에 필요한 라우트 파일을 빌드 결과물에 포함
+      - name: Copy _routes.json to build output
+        run: cp _routes.json .open-next/
+
       # Cloudflare Pages로 결과물 전송 (배포)
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
