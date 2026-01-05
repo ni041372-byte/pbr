@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
         
         // This is a mock authorization.
         // In a real app, you'd hash and compare the password.
-        const user = await d1Client.getUserByEmail(credentials.email);
+        const user = await d1Client.getUserByEmailAny(credentials.email);
 
         if (user && credentials.password === "password") { // MOCK PASSWORD CHECK
           // Return the user object that NextAuth will use to create the JWT.

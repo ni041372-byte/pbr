@@ -5,6 +5,7 @@ CREATE TABLE tenants (
     github_repo TEXT NOT NULL,
     plan_tier TEXT DEFAULT 'BASIC',
     config_json TEXT,
+    status TEXT CHECK(status IN ('ACTIVE', 'PENDING_DNS')) DEFAULT 'ACTIVE',
     created_at INTEGER DEFAULT (unixepoch())
 );
 
@@ -44,3 +45,4 @@ CREATE TABLE deployments (
     status TEXT CHECK(status IN ('PENDING', 'SUCCESS', 'FAILURE')),
     created_at INTEGER DEFAULT (unixepoch())
 );
+

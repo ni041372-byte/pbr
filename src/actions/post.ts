@@ -29,11 +29,22 @@ export async function publishPost(postId: string, tenantId: string): Promise<Pub
         
         // Option 1: Direct HTTP Request to Worker (Current Implementation)
         // NOTE: Replace `<YOUR-SUBDOMAIN>` with your actual Cloudflare Workers subdomain.
-        const workerUrl = `https://pbr.ni041372-byte.workers.dev/publish`;
+        const workerUrl = process.env.PUBLISH_WORKER_URL;
+        const workerSecret = process.env.WORKER_SHARED_SECRET;
+
+        if (!workerUrl) {
+            throw new Error('PUBLISH_WORKER_URL is not configured.');
+        }
+        if (!workerSecret) {
+            throw new Error('WORKER_SHARED_SECRET is not configured.');
+        }
         
         const response = await fetch(workerUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'x-worker-auth': workerSecret,
+            },
             body: JSON.stringify({ postId, tenantId }),
         });
 
@@ -84,3 +95,4 @@ export async function publishPost(postId: string, tenantId: string): Promise<Pub
         return { success: false, message: `Failed to trigger publish worker: ${error.message}` };
     }
 }
+

@@ -33,18 +33,18 @@ export function CustomD1Adapter(db: SuperAdminD1Client): Adapter {
             tenant_id: null, // Or assign to a default tenant, depending on logic
             // name and image are not in our custom schema, so we ignore them.
         });
-        const newUser = await db.getUserByEmail(data.email);
+        const newUser = await db.getUserByEmailAny(data.email);
         return formatAdapterUser(newUser)!; // Assert non-null as we just created it.
     },
 
     async getUser(id) {
-        const user = await db.getUserById(id);
+        const user = await db.getUserByIdAny(id);
         return formatAdapterUser(user);
     },
 
     async getUserByEmail(email) {
         // The D1Client needs to be a SuperAdmin client to search across all tenants.
-        const user = await db.getUserByEmail(email);
+        const user = await db.getUserByEmailAny(email);
         return formatAdapterUser(user);
     },
 
@@ -97,3 +97,5 @@ export function CustomD1Adapter(db: SuperAdminD1Client): Adapter {
     },
   };
 }
+
+

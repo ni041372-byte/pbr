@@ -149,6 +149,15 @@ export class SuperAdminD1Client extends D1Client {
     constructor(d1: D1Database) {
         super(d1, null);
     }
+
+    async getUserByIdAny(id: string): Promise<User | null> {
+        return this.queryOne(UserSchema, 'SELECT * FROM users WHERE id = ?', [id]);
+    }
+
+    async getUserByEmailAny(email: string): Promise<User | null> {
+        return this.queryOne(UserSchema, 'SELECT * FROM users WHERE email = ?', [email]);
+    }
+
     async createTenant(data: Omit<Tenant, 'id' | 'created_at'>): Promise<Tenant> {
         const newTenant = TenantSchema.parse({ 
             id: `tnt_${crypto.randomUUID()}`, 

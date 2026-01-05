@@ -2,7 +2,7 @@
 
 This project is a multi-tenant headless CMS built with Next.js and Cloudflare. It is designed for agencies to manage hundreds of client websites from a single instance.
 
-## ‚ú® Core Features
+## ??Core Features
 
 *   **Multi-Tenant Architecture:** Each tenant (client) has its own isolated data and configuration, identified by hostname.
 *   **Headless CMS:** Content is managed in a central admin panel and delivered via a Git-based workflow.
@@ -10,7 +10,7 @@ This project is a multi-tenant headless CMS built with Next.js and Cloudflare. I
 *   **Dynamic Admin Panel:** The CMS backend is a dynamic application for real-time content management.
 *   **Cloudflare Integration:** Leverages Cloudflare D1 (database), R2 (storage), and Pages (hosting) for a serverless, edge-first architecture.
 
-## üöÄ Getting Started
+## ?? Getting Started
 
 This guide will walk you through deploying the `endpr` project to Cloudflare Pages.
 
@@ -63,6 +63,10 @@ This guide will walk you through deploying the `endpr` project to Cloudflare Pag
         *   `R2_ENDPOINT`: Your R2 S3 API endpoint. You can find this in the R2 bucket settings (e.g., `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`).
         *   `R2_ACCESS_KEY_ID`: Your R2 API Access Key ID.
         *   `R2_SECRET_ACCESS_KEY`: Your R2 API Secret Access Key.
+        *   `R2_BUCKET_NAME`: The R2 bucket name for uploads.
+        *   `R2_PUBLIC_URL`: Public base URL for serving R2 assets.
+        *   `PUBLISH_WORKER_URL`: Full URL to the publish worker endpoint (e.g., https://<subdomain>.workers.dev/publish).
+        *   `WORKER_SHARED_SECRET`: Shared secret sent to the worker in `x-worker-auth`.
 
 4.  **Save and Deploy:**
     *   Click **Save and Deploy**.
@@ -90,7 +94,7 @@ This guide will walk you through deploying the `endpr` project to Cloudflare Pag
         ```
         (Replace `your-email@example.com` with your email)
 
-## üõ†Ô∏è Local Development
+## ?õ†Ô∏?Local Development
 
 While the primary workflow is deployment-based, you can still run the project locally.
 
@@ -102,4 +106,7 @@ While the primary workflow is deployment-based, you can still run the project lo
     *   `npx wrangler dev --local --experimental-local-pages`
 
 This will start a local development server with live-reloading and access to your local D1 database.
+
+
+
 

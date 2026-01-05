@@ -52,6 +52,13 @@ async function handlePublishRequest(request: Request, env: Env): Promise<Respons
         return new Response(JSON.stringify({ success: false, message: 'postId and tenantId are required' }), { status: 400, headers: { 'Content-Type': 'application/json' }});
     }
 
+    const authHeader = request.headers.get('x-worker-auth');
+    if (!env.WORKER_SHARED_SECRET || authHeader !== env.WORKER_SHARED_SECRET) {
+        return new Response(JSON.stringify({ success: false, message: 'Unauthorized' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
 	if (!env.GITHUB_TOKEN) {
 		throw new Error("GITHUB_TOKEN secret is not set.");
 	}
@@ -193,7 +200,7 @@ async function createPresignedUrl({ bucketName, key, method, expiresIn, env }: {
 		secretAccessKey: secretAccessKey,
 	});
 
-	return new URL(`httpshttps://${signedRequest.hostname}${signedRequest.path}`).toString();
+	return new URL(`https://${signedRequest.hostname}${signedRequest.path}`).toString();
 }
 
 interface Env {
@@ -203,4 +210,6 @@ interface Env {
 	R2_SECRET_ACCESS_KEY: string;
 	CLOUDFLARE_ACCOUNT_ID: string;
 	GITHUB_TOKEN: string;
+\tWORKER_SHARED_SECRET: string;
 }
+
