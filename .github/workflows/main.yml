@@ -34,22 +34,22 @@ jobs:
           # 리눅스 환경에 맞는 메모리 옵션 설정
           NODE_OPTIONS: "--max_old_space_size=6144"
 
-      # OpenNext가 생성한 worker 파일이 Pages에서 기대하는 이름으로 존재하도록 정규화
-      - name: Normalize worker filename
+      # 배포 디렉터리(.open-next/static)에 Pages가 기대하는 워커/라우트 파일을 배치
+      - name: Prepare Pages publish directory
         run: |
+          mkdir -p .open-next/static
           if [ -f .open-next/worker.js ] && [ ! -f .open-next/_worker.js ]; then
             cp .open-next/worker.js .open-next/_worker.js
           fi
-
-      # Cloudflare Pages에 필요한 라우트 파일을 빌드 결과물에 포함
-      - name: Copy _routes.json to build output
-        run: cp _routes.json .open-next/
+          cp .open-next/_worker.js .open-next/static/
+          cp _routes.json .open-next/_routes.json
+          cp _routes.json .open-next/static/_routes.json
 
       # 배포 산출물에 필수 파일이 모두 존재하는지 확인
       - name: Verify OpenNext artifacts
         run: |
-          test -f .open-next/_worker.js
-          test -f .open-next/_routes.json
+          test -f .open-next/static/_worker.js
+          test -f .open-next/static/_routes.json
 
       # Cloudflare Pages로 결과물 전송 (배포)
       - name: Publish to Cloudflare Pages
@@ -58,7 +58,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: pbr # Cloudflare에 만들어둔 프로젝트 이름 (로그에 'pbr'로 확인됨)
-          directory: .open-next # OpenNext의 빌드 결과물 경로
+          directory: .open-next/static # OpenNext의 빌드 결과물 경로(정적 파일 및 워커 포함)
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: codex/12-58-08 # 배포될 브랜치 명시
           wranglerVersion: '3'
